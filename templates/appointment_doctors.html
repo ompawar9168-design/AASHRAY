@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card large-card">
+        <span class="tag">{{ t.available_doctors }}</span>
+        <h2>{{ t.available_doctors }}</h2>
+        <p class="card-text">{{ t.selected_doctor_type }}: <strong>{{ doctor_type }}</strong></p>
+
+        {% if doctors %}
+            <div class="doctor-list">
+                {% for doctor in doctors %}
+                <div class="doctor-card">
+                    <div class="status-row"><strong>{{ t.doctor_name }}:</strong> {{ doctor.name }}</div>
+                    <div class="status-row"><strong>{{ t.specialization }}:</strong> {{ doctor.specialization }}</div>
+                    <div class="status-row"><strong>{{ t.experience }}:</strong> {{ doctor.experience }}</div>
+                    <div class="status-row"><strong>{{ t.fees }}:</strong> {{ doctor.fees }}</div>
+                    <div class="status-row"><strong>{{ t.available_slot }}:</strong> {{ doctor.slot }}</div>
+                    <div class="status-row"><strong>{{ t.hospital_name }}:</strong> {{ doctor.hospital }}</div>
+                    <div class="status-row"><strong>{{ t.current_location }}:</strong> {{ doctor.location }}</div>
+
+                    <form action="{{ url_for('select_doctor') }}" method="POST" class="top-btn-space">
+                        <input type="hidden" name="doctor_type" value="{{ doctor_type }}">
+                        <input type="hidden" name="permanent_disease" value="{{ permanent_disease }}">
+                        <input type="hidden" name="doctor_name" value="{{ doctor.name }}">
+                        <input type="hidden" name="specialization" value="{{ doctor.specialization }}">
+                        <input type="hidden" name="experience" value="{{ doctor.experience }}">
+                        <input type="hidden" name="fees" value="{{ doctor.fees }}">
+                        <input type="hidden" name="slot" value="{{ doctor.slot }}">
+                        <input type="hidden" name="hospital_name" value="{{ doctor.hospital }}">
+                        <input type="hidden" name="location" value="{{ doctor.location }}">
+
+                        <button type="submit" class="primary-btn full-btn">{{ t.select_doctor }}</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="result-message error-message">
+                {{ t.no_doctors_found }}
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('appointment_page') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.go_back }}
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        <span class="tag">{{ t.verification_result }}</span>
+        <h2>{{ t.autofilled_details }}</h2>
+
+        <div class="file-preview top-space">
+            {{ t.selected_file }}: <strong>{{ uploaded_filename }}</strong>
+        </div>
+
+        <div class="detail-list">
+            <div class="detail-item {% if verification_data.name_valid %}success{% else %}error{% endif %}">
+                <div>
+                    <strong>{{ t.name }}:</strong>
+                    {% if verification_data.name %}
+                        {{ verification_data.name }}
+                    {% else %}
+                        ---
+                    {% endif %}
+                </div>
+                <div class="status-mark">
+                    {% if verification_data.name_valid %}
+                        ✔ {{ t.verified }}
+                    {% else %}
+                        ✖ {{ t.invalid }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="detail-item {% if verification_data.age_valid %}success{% else %}error{% endif %}">
+                <div>
+                    <strong>{{ t.age }}:</strong> {{ verification_data.age }}
+                </div>
+                <div class="status-mark">
+                    {% if verification_data.age_valid %}
+                        ✔ {{ t.eligible }}
+                    {% else %}
+                        ✖ {{ t.invalid }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="detail-item {% if verification_data.location_valid %}success{% else %}error{% endif %}">
+                <div>
+                    <strong>{{ t.location }}:</strong>
+                    {% if verification_data.location %}
+                        {{ verification_data.location }}
+                    {% else %}
+                        ---
+                    {% endif %}
+                </div>
+                <div class="status-mark">
+                    {% if verification_data.location_valid %}
+                        ✔ {{ t.verified }}
+                    {% else %}
+                        ✖ {{ t.invalid }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if all_valid %}
+            <div class="result-message success-message">
+                {{ t.valid_age }}
+            </div>
+
+            <a href="{{ url_for('proceed') }}" class="primary-link-btn full-btn-link">
+                {{ t.proceed }}
+            </a>
+        {% else %}
+            <div class="result-message error-message">
+                {{ t.invalid_age }} / {{ t.cannot_proceed }}
+            </div>
+
+            <button class="disabled-btn full-btn" disabled>
+                {{ t.proceed }}
+            </button>
+
+            <a href="{{ url_for('aadhaar_page') }}" class="secondary-btn full-btn-link top-btn-space">
+                {{ t.go_back }}
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

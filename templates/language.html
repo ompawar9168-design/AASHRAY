@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        <span class="tag">{{ t.select_language }}</span>
+        <h2>{{ t.select_language }}</h2>
+        <p class="card-text">{{ t.choose_language }}</p>
+
+        <form action="{{ url_for('set_language') }}" method="POST">
+            <div class="language-buttons">
+
+                <input type="radio" id="lang-en" name="language" value="en" {% if current_lang == 'en' %}checked{% endif %}>
+                <label for="lang-en" class="lang-option">English</label>
+
+                <input type="radio" id="lang-hi" name="language" value="hi" {% if current_lang == 'hi' %}checked{% endif %}>
+                <label for="lang-hi" class="lang-option">हिंदी</label>
+
+                <input type="radio" id="lang-mr" name="language" value="mr" {% if current_lang == 'mr' %}checked{% endif %}>
+                <label for="lang-mr" class="lang-option">मराठी</label>
+
+            </div>
+
+            <button type="submit" class="primary-btn full-btn">
+                {{ t.continue }}
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

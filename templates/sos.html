@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        <span class="tag">{{ t.sos }}</span>
+        <h2>{{ t.sos }}</h2>
+        <p class="card-text">{{ t.sos_page_text }}</p>
+
+        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link">
+            {{ t.back_dashboard }}
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        {% if first_time %}
+            <span class="tag">{{ t.first_time_appointment }}</span>
+            <h2>{{ t.first_time_appointment }}</h2>
+        {% else %}
+            <span class="tag">{{ t.repeat_appointment }}</span>
+            <h2>{{ t.repeat_appointment }}</h2>
+        {% endif %}
+
+        <form action="{{ url_for('show_doctors') }}" method="POST" class="custom-form">
+            {% if first_time %}
+            <div class="form-group">
+                <label>{{ t.tell_permanent_disease }}</label>
+                <input type="text" name="permanent_disease" class="custom-input" placeholder="Diabetes / BP / None" required>
+            </div>
+            {% else %}
+            <input type="hidden" name="permanent_disease" value="{{ saved_disease }}">
+            {% endif %}
+
+            <div class="form-group">
+                <label>{{ t.doctor_needed }}</label>
+                <select name="doctor_type" class="custom-select" required>
+                    <option value="">{{ t.choose_doctor_type }}</option>
+                    <option value="general">{{ t.general_physician }}</option>
+                    <option value="cardiology">{{ t.cardiology }}</option>
+                    <option value="orthopedic">{{ t.orthopedic }}</option>
+                    <option value="neurology">{{ t.neurology }}</option>
+                    <option value="eye">{{ t.eye_specialist }}</option>
+                    <option value="ent">{{ t.ent }}</option>
+                </select>
+            </div>
+
+            <button type="submit" class="primary-btn full-btn">{{ t.show_doctors }}</button>
+        </form>
+
+        <a href="{{ url_for('appointment_status_page') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.view_status }}
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.back_dashboard }}
+        </a>
+    </div>
+</section>
+{% endblock %}

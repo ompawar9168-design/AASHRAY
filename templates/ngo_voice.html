@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Voice Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef3fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #14213d;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 26px;
+            box-shadow: 0 14px 40px rgba(20, 33, 61, 0.10);
+            padding: 42px 32px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f0ff;
+            color: #1456d9;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 18px;
+        }
+
+        .question {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-size: 1rem;
+            color: #5b6b88;
+            margin-bottom: 16px;
+            min-height: 24px;
+        }
+
+        .answer-box {
+            background: #f8fbff;
+            border: 1px solid #dbe5f4;
+            border-radius: 16px;
+            padding: 16px;
+            min-height: 90px;
+            margin-bottom: 22px;
+        }
+
+        .answer-label {
+            font-size: 0.92rem;
+            color: #5b6b88;
+            margin-bottom: 8px;
+        }
+
+        .answer {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1456d9;
+            word-break: break-word;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 14px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .primary-btn {
+            background: #1456d9;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #0d3fa5;
+        }
+
+        .secondary-btn {
+            background: #eef3fb;
+            color: #14213d;
+        }
+
+        .secondary-btn:hover {
+            background: #dde7f8;
+        }
+
+        .listening-dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #16a34a;
+            margin-right: 8px;
+            animation: pulse 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.9; }
+            70% { transform: scale(1.2); opacity: 0.5; }
+            100% { transform: scale(0.95); opacity: 0.9; }
+        }
+
+        @media (max-width: 640px) {
+            .card { padding: 28px 18px; }
+            .question { font-size: 1.45rem; }
+            h2 { font-size: 1.55rem; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="badge">NGO VOICE ASSISTANT</div>
+    <h2>NGO Voice Assistant</h2>
+
+    <div class="question" id="questionText">Press Start to begin</div>
+    <div class="status" id="statusText">Allow microphone access before starting</div>
+
+    <div class="answer-box">
+        <div class="answer-label">Your latest answer</div>
+        <div class="answer" id="answerText">No answer yet</div>
+    </div>
+
+    <div class="btn-row">
+        <button class="primary-btn" id="startBtn">Start</button>
+        <button class="secondary-btn" id="retryBtn" type="button">Repeat Question</button>
+    </div>
+</div>
+
+<script>
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    let currentQuestionIndex = 0;
+    let answers = [];
+    let assistantStarted = false;
+    let recognition = null;
+
+    const questions = [
+        "Which hospital do you want to visit?",
+        "What is the reason for appointment?",
+        "What date and time do you want appointment?"
+    ];
+
+    const questionText = document.getElementById("questionText");
+    const statusText = document.getElementById("statusText");
+    const answerText = document.getElementById("answerText");
+    const startBtn = document.getElementById("startBtn");
+    const retryBtn = document.getElementById("retryBtn");
+
+    function speak(text, onEndCallback = null) {
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "en-US";
+        utterance.rate = 0.95;
+
+        utterance.onend = function () {
+            if (onEndCallback) {
+                setTimeout(onEndCallback, 1000);
+            }
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function createRecognition() {
+        if (!SpeechRecognition) {
+            statusText.innerText = "Speech recognition is not supported in this browser. Please use Chrome or Edge.";
+            return null;
+        }
+
+        const recog = new SpeechRecognition();
+        recog.lang = "en-US";
+        recog.interimResults = false;
+        recog.maxAlternatives = 1;
+        recog.continuous = false;
+
+        recog.onstart = function () {
+            statusText.innerHTML = '<span class="listening-dot"></span>Listening now... please speak clearly';
+        };
+
+        recog.onresult = function (event) {
+            const transcript = event.results[0][0].transcript.trim();
+            answerText.innerText = transcript;
+            answers[currentQuestionIndex] = transcript;
+            statusText.innerText = "Answer captured successfully";
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(() => {
+                    askCurrentQuestion();
+                }, 1200);
+            } else {
+                autoSubmitRequest();
+            }
+        };
+
+        recog.onerror = function (event) {
+            if (event.error === "not-allowed") {
+                statusText.innerText = "Microphone permission denied. Please allow microphone access.";
+            } else if (event.error === "no-speech") {
+                statusText.innerText = "No speech detected. Click Repeat Question, then speak clearly.";
+            } else if (event.error === "audio-capture") {
+                statusText.innerText = "No microphone detected. Please check your microphone.";
+            } else {
+                statusText.innerText = "Mic error: " + event.error;
+            }
+        };
+
+        return recog;
+    }
+
+    function askCurrentQuestion() {
+        questionText.innerText = questions[currentQuestionIndex];
+        answerText.innerText = "Waiting for your answer...";
+        statusText.innerText = "Assistant is asking the question...";
+
+        speak(questions[currentQuestionIndex], () => {
+            startListening();
+        });
+    }
+
+    function startListening() {
+        recognition = createRecognition();
+        if (!recognition) return;
+
+        try {
+            recognition.start();
+        } catch (error) {
+            statusText.innerText = "Could not start microphone. Click Repeat Question.";
+        }
+    }
+
+    async function requestMicPermission() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            return true;
+        } catch (e) {
+            statusText.innerText = "Microphone permission is blocked. Please allow it from browser settings.";
+            return false;
+        }
+    }
+
+    async function startAssistant() {
+        currentQuestionIndex = 0;
+        answers = ["", "", ""];
+
+        const permissionGranted = await requestMicPermission();
+        if (!permissionGranted) return;
+
+        assistantStarted = true;
+        askCurrentQuestion();
+    }
+
+    function repeatQuestion() {
+        if (!assistantStarted) {
+            startAssistant();
+            return;
+        }
+
+        if (currentQuestionIndex >= questions.length) return;
+        askCurrentQuestion();
+    }
+
+    function autoSubmitRequest() {
+        statusText.innerText = "All 3 answers captured. Auto submitting request...";
+        questionText.innerText = "Submitting your NGO request...";
+        answerText.innerText = answers.join(" | ");
+
+        fetch("/save-ngo-voice", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                hospital: answers[0] || "",
+                reason: answers[1] || "",
+                datetime: answers[2] || ""
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "ok") {
+                statusText.innerText = "Request submitted successfully. Opening status page...";
+                speak("Your request has been submitted successfully.", () => {
+                    window.location.href = "/ngo-status";
+                });
+            } else {
+                statusText.innerText = "Something went wrong while submitting.";
+            }
+        })
+        .catch(() => {
+            statusText.innerText = "Network error while submitting request.";
+        });
+    }
+
+    startBtn.addEventListener("click", startAssistant);
+    retryBtn.addEventListener("click", repeatQuestion);
+</script>
+
+</body>
+</html>

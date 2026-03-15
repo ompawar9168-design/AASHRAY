@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        <span class="tag">{{ t.ngo }}</span>
+        <h2>{{ t.ngo_request_form }}</h2>
+        <p class="card-text">{{ t.ngo_page_text }}</p>
+
+        <form action="{{ url_for('submit_ngo_request') }}" method="POST" class="custom-form">
+            <div class="form-group">
+                <label>{{ t.hospital_name }}</label>
+                <input type="text" name="hospital_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t.hospital_address }}</label>
+                <textarea name="hospital_address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t.appointment_reason }}</label>
+                <textarea name="appointment_reason" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t.appointment_date }}</label>
+                <input type="date" name="appointment_date" required>
+            </div>
+
+            <div class="form-group">
+                <label>{{ t.appointment_time }}</label>
+                <input type="time" name="appointment_time" required>
+            </div>
+
+            <button type="submit" class="primary-btn full-btn">{{ t.submit_request }}</button>
+        </form>
+
+        <a href="{{ url_for('ngo_status_page') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.view_status }}
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.back_dashboard }}
+        </a>
+    </div>
+</section>
+{% endblock %}

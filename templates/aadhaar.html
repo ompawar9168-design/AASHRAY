@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card">
+        <span class="tag">{{ t.upload_aadhaar }}</span>
+        <h2>{{ t.upload_aadhaar }}</h2>
+        <p class="card-text">{{ t.upload_text }}</p>
+
+        <form action="{{ url_for('verify_aadhaar') }}" method="POST" enctype="multipart/form-data">
+            <div class="upload-box">
+                <p>{{ t.upload_aadhaar }}</p>
+
+                <input type="file" name="aadhaar_file" id="aadhaar_file" class="file-input" accept=".jpg,.jpeg,.png,.pdf" required>
+
+                <div class="file-preview" id="filePreview">
+                    {{ t.selected_file }}: <span id="fileName">No file selected</span>
+                </div>
+
+                <button type="submit" class="primary-btn full-btn">
+                    {{ t.verify_now }}
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

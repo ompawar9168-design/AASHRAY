@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card large-card">
+        <span class="tag">{{ t.ngo_status }}</span>
+        <h2>{{ t.ngo_status }}</h2>
+        <p class="card-text">Here you can see whether your NGO request is pending, approved, or rejected.</p>
+
+        {% if requests_data %}
+            <div class="status-list">
+                {% for item in requests_data %}
+                <div class="status-card">
+                    <div class="status-row"><strong>{{ t.hospital_name }}:</strong> {{ item["hospital_name"] }}</div>
+                    <div class="status-row"><strong>{{ t.appointment_reason }}:</strong> {{ item["appointment_reason"] }}</div>
+                    <div class="status-row"><strong>{{ t.appointment_date }}:</strong> {{ item["appointment_date"] }}</div>
+                    <div class="status-row"><strong>{{ t.appointment_time }}:</strong> {{ item["appointment_time"] }}</div>
+                    <div class="status-row">
+                        <strong>{{ t.status }}:</strong>
+                        {% if item["status"] == "Approved" %}
+                            <span class="status-badge approved-badge">{{ t.approved }}</span>
+                        {% elif item["status"] == "Rejected" %}
+                            <span class="status-badge rejected-badge">{{ t.rejected }}</span>
+                        {% else %}
+                            <span class="status-badge pending-badge">{{ t.pending }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="result-message error-message">
+                {{ t.no_requests }}
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.back_dashboard }}
+        </a>
+    </div>
+</section>
+{% endblock %}

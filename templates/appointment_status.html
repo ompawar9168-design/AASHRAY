@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="single-screen-wrap">
+    <div class="main-card large-card">
+        <span class="tag">{{ t.my_appointments }}</span>
+        <h2>{{ t.my_appointments }}</h2>
+
+        {% if appointments %}
+            <div class="status-list">
+                {% for item in appointments %}
+                <div class="status-card">
+                    <div class="status-row"><strong>{{ t.doctor_name }}:</strong> {{ item["doctor_name"] }}</div>
+                    <div class="status-row"><strong>{{ t.specialization }}:</strong> {{ item["specialization"] }}</div>
+                    <div class="status-row"><strong>{{ t.experience }}:</strong> {{ item["experience"] }}</div>
+                    <div class="status-row"><strong>{{ t.fees }}:</strong> {{ item["fees"] }}</div>
+                    <div class="status-row"><strong>{{ t.available_slot }}:</strong> {{ item["slot"] }}</div>
+                    <div class="status-row"><strong>{{ t.hospital_name }}:</strong> {{ item["hospital_name"] }}</div>
+                    <div class="status-row"><strong>{{ t.current_location }}:</strong> {{ item["location"] }}</div>
+                    <div class="status-row">
+                        <strong>{{ t.status }}:</strong>
+                        <span class="status-badge pending-badge">{{ t.pending }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="result-message error-message">
+                {{ t.no_requests }}
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('appointment_page') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.appointment }}
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link top-btn-space">
+            {{ t.back_dashboard }}
+        </a>
+    </div>
+</section>
+{% endblock %}

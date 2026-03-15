@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="dashboard-simple-header">
+        <span class="tag">{{ t.dashboard_title }}</span>
+        <h2>{{ t.welcome_user }}, {{ user_name }}</h2>
+        <p>{{ t.dashboard_text }}</p>
+    </div>
+
+    <div class="dashboard-options-grid">
+        <a href="{{ url_for('ngo_voice') }}" class="dashboard-card-link">
+            <div class="dashboard-main-card">
+                <div class="dashboard-icon">🤝</div>
+                <h3>{{ t.ngo }}</h3>
+                <p>{{ t.ngo_text }}</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('reminder_page') }}" class="dashboard-card-link">
+            <div class="dashboard-main-card">
+                <div class="dashboard-icon">💊</div>
+                <h3>{{ t.reminder }}</h3>
+                <p>{{ t.reminder_text }}</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('sos_page') }}" class="dashboard-card-link">
+            <div class="dashboard-main-card sos-main-card">
+                <div class="dashboard-icon">🚨</div>
+                <h3>{{ t.sos }}</h3>
+                <p>{{ t.sos_text }}</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('appointment_page') }}" class="dashboard-card-link">
+            <div class="dashboard-main-card">
+                <div class="dashboard-icon">🩺</div>
+                <h3>{{ t.appointment }}</h3>
+                <p>{{ t.appointment_text }}</p>
+            </div>
+        </a>
+    </div>
+</section>
+{% endblock %}

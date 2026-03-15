@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero-section">
+    <div class="hero-text">
+        <span class="tag">Elder-Friendly • Simple • Safe</span>
+        <h2>Welcome to AASHRAY</h2>
+        <p>
+            AASHRAY is a healthcare support platform specially designed for people aged 50 and above.
+            It helps users with NGO support, medicine reminders, emergency SOS, and medical appointments.
+        </p>
+    </div>
+</section>
+
+<section class="grid-section">
+
+    <!-- Language Selection Card -->
+    <div class="ui-card">
+        <h3>Select Language</h3>
+        <p class="card-text">Choose your preferred language to continue.</p>
+
+        <div class="language-buttons">
+            <button class="lang-btn active">English</button>
+            <button class="lang-btn">हिंदी</button>
+            <button class="lang-btn">मराठी</button>
+        </div>
+    </div>
+
+    <!-- Aadhaar Upload Card -->
+    <div class="ui-card">
+        <h3>Aadhaar Verification</h3>
+        <p class="card-text">Upload Aadhaar card to verify age and autofill details.</p>
+
+        <div class="upload-box">
+            <p>Upload Aadhaar Card</p>
+            <button class="primary-btn">Choose File</button>
+        </div>
+    </div>
+
+    <!-- Autofill Result Card -->
+    <div class="ui-card">
+        <h3>Autofilled Details</h3>
+        <p class="card-text">System will extract and verify the details below.</p>
+
+        <div class="detail-list">
+            <div class="detail-item success">
+                <span>Name</span>
+                <span class="status">✔ Verified</span>
+            </div>
+            <div class="detail-item success">
+                <span>Age: 58</span>
+                <span class="status">✔ Eligible</span>
+            </div>
+            <div class="detail-item success">
+                <span>Location</span>
+                <span class="status">✔ Verified</span>
+            </div>
+        </div>
+
+        <button class="primary-btn full-btn">Proceed</button>
+    </div>
+
+</section>
+
+<section class="dashboard-preview">
+    <div class="section-head">
+        <h3>Main Dashboard Options</h3>
+        <p>After successful verification, users will see these options.</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <div class="card-icon">🤝</div>
+            <h4>NGO</h4>
+            <p>Request support and track approval or rejection status.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">💊</div>
+            <h4>Medical Reminder</h4>
+            <p>Set tablet reminders and get alerts at the selected time.</p>
+        </div>
+
+        <div class="dashboard-card sos-card">
+            <div class="card-icon">🚨</div>
+            <h4>SOS</h4>
+            <p>Emergency support button for urgent situations.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">🏥</div>
+            <h4>Appointment</h4>
+            <p>Book appointments and choose the nearest hospital.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

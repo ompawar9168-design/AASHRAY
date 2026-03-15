@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Doctors</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-title">Available {{ doctor_type }} Doctors</h2>
+
+        {% if doctors %}
+            <div class="doctor-grid">
+                {% for doctor in doctors %}
+                <div class="doctor-card">
+                    <h3>{{ doctor.name }}</h3>
+                    <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+                    <p><strong>Experience:</strong> {{ doctor.experience }}</p>
+                    <p><strong>Consulting Fees:</strong> {{ doctor.fees }}</p>
+                    <p><strong>Available Slot:</strong> {{ doctor.slot }}</p>
+                    <p><strong>Hospital Name:</strong> {{ doctor.hospital }}</p>
+                    <p><strong>Current Location:</strong> {{ doctor.location }}</p>
+
+                    <a href="{{ url_for('confirm_appointment', doctor_id=doctor.id) }}" class="btn select-btn">
+                        Select Doctor
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card no-data-card">
+                <p>No doctors available for <strong>{{ doctor_type }}</strong>.</p>
+                <a href="{{ url_for('appointment') }}" class="btn">Try Again</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

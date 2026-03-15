@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <div>
+                <h1 class="brand-title">NGO Dashboard</h1>
+                <p class="brand-subtitle">Manage AASHRAY NGO Requests</p>
+            </div>
+
+            {% if session.get("ngo_logged_in") %}
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="container page-section">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

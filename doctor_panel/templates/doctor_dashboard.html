@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Dashboard</title>
+    <style>
+        body{
+            font-family:Arial;
+            background:#eef3fb;
+            padding:30px;
+        }
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+        }
+        .logout-btn{
+            background:#1456d9;
+            color:white;
+            text-decoration:none;
+            padding:10px 14px;
+            border-radius:8px;
+        }
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+        th,td{
+            padding:12px;
+            border:1px solid #ddd;
+            text-align:left;
+            vertical-align:top;
+        }
+        th{
+            background:#1456d9;
+            color:white;
+        }
+        .approve-btn{
+            background:green;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .reject-btn{
+            background:red;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .badge{
+            padding:6px 10px;
+            border-radius:999px;
+            font-weight:700;
+            display:inline-block;
+        }
+        .pending{background:#fff4db;color:#a16207;}
+        .approved{background:#e9f9ef;color:#166534;}
+        .rejected{background:#fff0f0;color:#b42318;}
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <h2>Doctor Dashboard</h2>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+</div>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Permanent Disease</th>
+        <th>Doctor Type Needed</th>
+        <th>Selected Doctor</th>
+        <th>Last Medical History</th>
+        <th>Last Visit Date</th>
+        <th>Last Visit Reason</th>
+        <th>Status</th>
+        <th>Approve</th>
+        <th>Reject</th>
+    </tr>
+
+    {% for a in appointments %}
+    <tr>
+        <td>{{ a["user_name"] }}</td>
+        <td>{{ a["age"] }}</td>
+        <td>{{ a["permanent_disease"] }}</td>
+        <td>{{ a["doctor_type"] }}</td>
+        <td>{{ a["doctor_name"] }}</td>
+        <td>{{ a["previous_medical_history"] }}</td>
+        <td>{{ a["previous_visit_date"] }}</td>
+        <td>{{ a["previous_visit_reason"] }}</td>
+        <td>
+            {% if a["status"] == "Approved" %}
+                <span class="badge approved">Approved</span>
+            {% elif a["status"] == "Rejected" %}
+                <span class="badge rejected">Rejected</span>
+            {% else %}
+                <span class="badge pending">Pending</span>
+            {% endif %}
+        </td>
+        <td>
+            <form action="{{ url_for('approve', appointment_id=a['id']) }}" method="POST">
+                <button type="submit" class="approve-btn">Approve</button>
+            </form>
+        </td>
+        <td>
+            <form action="{{ url_for('reject', appointment_id=a['id']) }}" method="POST">
+                <button type="submit" class="reject-btn">Reject</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
