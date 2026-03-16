@@ -33,6 +33,16 @@
                 <textarea name="note" rows="3"></textarea>
             </div>
 
+            <div class="form-group">
+                <label>Family Member Name</label>
+                <input type="text" name="family_name" placeholder="Enter family member name">
+            </div>
+
+            <div class="form-group">
+                <label>Family Member Phone</label>
+                <input type="text" name="family_phone" placeholder="Enter family member phone number">
+            </div>
+
             <button type="submit" class="primary-btn full-btn">{{ t.save_reminder }}</button>
         </form>
 
@@ -47,6 +57,7 @@
                         <div class="status-row"><strong>{{ t.start_date }}:</strong> {{ item["start_date"] }}</div>
                         <div class="status-row"><strong>{{ t.time }}:</strong> {{ item["reminder_time"] }}</div>
                         <div class="status-row"><strong>{{ t.total_days }}:</strong> {{ item["total_days"] }}</div>
+
                         <div class="status-row">
                             <strong>{{ t.status }}:</strong>
                             {% if item["status_text"] == "completed" %}
@@ -55,12 +66,17 @@
                                 <span class="status-badge approved-badge">{{ t.active }}</span>
                             {% endif %}
                         </div>
+
                         {% if item["status_text"] != "completed" %}
                         <div class="status-row"><strong>{{ t.days_left }}:</strong> {{ item["days_left"] }}</div>
                         {% endif %}
+
                         {% if item["note"] %}
                         <div class="status-row"><strong>{{ t.note }}:</strong> {{ item["note"] }}</div>
                         {% endif %}
+
+                        <div class="status-row"><strong>Family Member:</strong> {{ item["family_name"] if item["family_name"] else "Not added" }}</div>
+                        <div class="status-row"><strong>Family Phone:</strong> {{ item["family_phone"] if item["family_phone"] else "Not added" }}</div>
                     </div>
                     {% endfor %}
                 </div>
@@ -84,6 +100,10 @@
         <h3>{{ t.call_from }}</h3>
         <p id="callMedicineName" class="call-medicine"></p>
 
+        <div id="familyReminderBox" class="call-message-box hidden" style="margin-bottom:12px;">
+            <p><strong>Family Alert:</strong> <span id="familyAlertText"></span></p>
+        </div>
+
         <div class="call-actions">
             <button type="button" id="dismissCallBtn" class="call-btn dismiss-btn">{{ t.dismiss }}</button>
             <button type="button" id="receiveCallBtn" class="call-btn receive-btn">{{ t.receive }}</button>
@@ -96,101 +116,7 @@
 </div>
 
 <script>
-(function () {
-    const currentLang = {{ current_lang|tojson }};
-    const callModal = document.getElementById("callModal");
-    const receiveBtn = document.getElementById("receiveCallBtn");
-    const dismissBtn = document.getElementById("dismissCallBtn");
-    const msgBox = document.getElementById("callMessageBox");
-    const spokenMessage = document.getElementById("spokenMessage");
-    const callMedicineName = document.getElementById("callMedicineName");
-
-    let activeReminderId = null;
-    let modalOpen = false;
-
-    function showModal(medicineName, message) {
-        callMedicineName.textContent = medicineName;
-        spokenMessage.textContent = message;
-        msgBox.classList.add("hidden");
-        callModal.classList.remove("hidden");
-        modalOpen = true;
-    }
-
-    function hideModal() {
-        callModal.classList.add("hidden");
-        modalOpen = false;
-        activeReminderId = null;
-    }
-
-    async function markReminderDone() {
-        if (!activeReminderId) return;
-        try {
-            await fetch("/mark-reminder-alerted/" + activeReminderId, {
-                method: "POST"
-            });
-        } catch (e) {
-            console.log("mark reminder failed", e);
-        }
-    }
-
-    function speakText(text, langCode) {
-        if (!("speechSynthesis" in window)) return;
-
-        window.speechSynthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        if (langCode === "hi") {
-            utterance.lang = "hi-IN";
-        } else if (langCode === "mr") {
-            utterance.lang = "mr-IN";
-        } else {
-            utterance.lang = "en-US";
-        }
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-
-        try {
-            window.speechSynthesis.speak(utterance);
-        } catch (e) {
-            console.log("speech failed", e);
-        }
-    }
-
-    async function checkDueReminder() {
-        if (modalOpen) return;
-
-        try {
-            const res = await fetch("/check-due-reminder", { cache: "no-store" });
-            const data = await res.json();
-            console.log("due reminder check:", data);
-
-            if (data.due) {
-                activeReminderId = data.id;
-                showModal(data.medicine_name, data.message);
-            }
-        } catch (e) {
-            console.log("check due reminder failed", e);
-        }
-    }
-
-    receiveBtn.addEventListener("click", async function () {
-        msgBox.classList.remove("hidden");
-        speakText(spokenMessage.textContent, currentLang);
-        await markReminderDone();
-        setTimeout(hideModal, 1500);
-    });
-
-    dismissBtn.addEventListener("click", async function () {
-        if ("speechSynthesis" in window) {
-            window.speechSynthesis.cancel();
-        }
-        await markReminderDone();
-        hideModal();
-    });
-
-    checkDueReminder();
-    setInterval(checkDueReminder, 5000);
-})();
+    window.currentLang = {{ current_lang|tojson }};
 </script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const callMedicineName = document.getElementById("callMedicineName");
     const spokenMessage = document.getElementById("spokenMessage");
     const callMessageBox = document.getElementById("callMessageBox");
+    const familyReminderBox = document.getElementById("familyReminderBox");
+    const familyAlertText = document.getElementById("familyAlertText");
 
     let activeReminderId = null;
     let modalOpen = false;
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function showCallModal(medicineName, message) {
+    function showCallModal(medicineName, message, familyName, familyPhone) {
         if (!callModal) return;
 
         if (callMedicineName) {
@@ -70,10 +72,23 @@ document.addEventListener("DOMContentLoaded", function () {
             callMessageBox.classList.add("hidden");
         }
 
+        if (familyReminderBox && familyAlertText) {
+            if (familyName || familyPhone) {
+                familyReminderBox.classList.remove("hidden");
+                familyAlertText.textContent = `${familyName || "Family Member"} (${familyPhone || "No phone"}) will also get reminder`;
+            } else {
+                familyReminderBox.classList.add("hidden");
+            }
+        }
+
         callModal.classList.remove("hidden");
         modalOpen = true;
 
         playRingtone();
+
+        if (navigator.vibrate) {
+            navigator.vibrate([300, 200, 300, 200, 300]);
+        }
 
         console.log("Call modal opened");
     }
@@ -155,7 +170,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (data.due) {
                 activeReminderId = data.id;
-                showCallModal(data.medicine_name, data.message);
+                showCallModal(
+                    data.medicine_name,
+                    data.message,
+                    data.family_name,
+                    data.family_phone
+                );
             }
         } catch (e) {
             console.log("Reminder check failed", e);

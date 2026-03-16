@@ -13,6 +13,7 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+
 translations = {
     "en": {
         "app_name": "AASHRAY",
@@ -105,6 +106,192 @@ translations = {
         "repeat_appointment": "Repeat Appointment",
         "tell_permanent_disease": "Tell your permanent disease",
         "doctor_needed": "Which type of doctor do you need?"
+    },
+
+    "hi": {
+        "app_name": "आश्रय",
+        "subtitle": "50+ नागरिकों के लिए स्वास्थ्य सहायता",
+        "select_language": "भाषा चुनें",
+        "choose_language": "जारी रखने के लिए अपनी भाषा चुनें",
+        "continue": "आगे बढ़ें",
+        "upload_aadhaar": "आधार कार्ड अपलोड करें",
+        "upload_text": "आयु सत्यापन के लिए कृपया अपना आधार कार्ड अपलोड करें",
+        "selected_file": "चयनित फ़ाइल",
+        "verify_now": "अभी सत्यापित करें",
+        "verification_result": "सत्यापन परिणाम",
+        "autofilled_details": "ऑटोफिल विवरण",
+        "name": "नाम",
+        "age": "आयु",
+        "location": "स्थान",
+        "verified": "सत्यापित",
+        "eligible": "पात्र",
+        "invalid": "अमान्य",
+        "invalid_age": "अमान्य आयु। केवल 50+ उपयोगकर्ता आगे बढ़ सकते हैं।",
+        "cannot_proceed": "आगे नहीं बढ़ सकते",
+        "valid_age": "आयु सफलतापूर्वक सत्यापित हुई। आप आगे बढ़ सकते हैं।",
+        "proceed": "आगे बढ़ें",
+        "ngo": "एनजीओ",
+        "reminder": "मेडिकल रिमाइंडर",
+        "sos": "एसओएस",
+        "appointment": "अपॉइंटमेंट",
+        "go_back": "वापस जाएँ",
+        "dashboard_title": "मुख्य डैशबोर्ड",
+        "dashboard_text": "आगे बढ़ने के लिए एक विकल्प चुनें।",
+        "welcome_user": "स्वागत है",
+        "ngo_text": "एनजीओ सहायता के लिए अनुरोध करें और स्थिति देखें।",
+        "reminder_text": "दवा और टैबलेट रिमाइंडर सेट करें।",
+        "sos_text": "आपातकालीन स्थिति में एसओएस सहायता का उपयोग करें।",
+        "appointment_text": "मेडिकल अपॉइंटमेंट और अस्पताल विज़िट बुक करें।",
+        "back_dashboard": "डैशबोर्ड पर वापस जाएँ",
+        "hospital_name": "अस्पताल का नाम",
+        "hospital_address": "अस्पताल का पता",
+        "appointment_reason": "अपॉइंटमेंट का कारण",
+        "appointment_date": "अपॉइंटमेंट की तारीख",
+        "appointment_time": "अपॉइंटमेंट का समय",
+        "submit_request": "अनुरोध सबमिट करें",
+        "ngo_status": "एनजीओ अनुरोध स्थिति",
+        "status": "स्थिति",
+        "pending": "लंबित",
+        "approved": "स्वीकृत",
+        "rejected": "अस्वीकृत",
+        "no_requests": "कोई अनुरोध नहीं मिला।",
+        "view_status": "स्थिति देखें",
+        "reminder_form_title": "दवा रिमाइंडर सेट करें",
+        "medicine_name": "दवा का नाम",
+        "start_date": "शुरू होने की तारीख",
+        "time": "समय",
+        "total_days": "कुल दिन",
+        "note": "वैकल्पिक नोट",
+        "save_reminder": "रिमाइंडर सेव करें",
+        "my_reminders": "मेरे रिमाइंडर",
+        "no_reminders": "कोई रिमाइंडर नहीं मिला।",
+        "call_from": "आश्रय रिमाइंडर",
+        "incoming_call": "इनकमिंग रिमाइंडर कॉल",
+        "receive": "रिसीव",
+        "dismiss": "बंद करें",
+        "tablet_message": "दवा लेने का समय हो गया है।",
+        "days_left": "बचे हुए दिन",
+        "completed": "पूरा हुआ",
+        "active": "सक्रिय",
+        "doctor_type": "डॉक्टर का प्रकार",
+        "choose_doctor_type": "डॉक्टर का प्रकार चुनें",
+        "general_physician": "जनरल फिजिशियन",
+        "cardiology": "कार्डियोलॉजी",
+        "orthopedic": "ऑर्थोपेडिक",
+        "neurology": "न्यूरोलॉजी",
+        "eye_specialist": "आंख विशेषज्ञ",
+        "ent": "ईएनटी",
+        "show_doctors": "डॉक्टर दिखाएँ",
+        "available_doctors": "उपलब्ध डॉक्टर",
+        "specialization": "विशेषज्ञता",
+        "experience": "अनुभव",
+        "fees": "कंसल्टिंग फीस",
+        "available_slot": "उपलब्ध स्लॉट",
+        "current_location": "वर्तमान स्थान",
+        "select_doctor": "डॉक्टर चुनें",
+        "my_appointments": "मेरे अपॉइंटमेंट",
+        "doctor_name": "डॉक्टर का नाम",
+        "selected_doctor_type": "चुना गया डॉक्टर प्रकार",
+        "no_doctors_found": "इस श्रेणी के लिए कोई डॉक्टर नहीं मिला।",
+        "permanent_disease": "स्थायी बीमारी",
+        "no_previous_record": "कोई पिछला रिकॉर्ड नहीं",
+        "first_time_appointment": "पहली बार अपॉइंटमेंट",
+        "repeat_appointment": "दोबारा अपॉइंटमेंट",
+        "tell_permanent_disease": "अपनी स्थायी बीमारी बताएं",
+        "doctor_needed": "आपको किस प्रकार के डॉक्टर चाहिए?"
+    },
+
+    "mr": {
+        "app_name": "आश्रय",
+        "subtitle": "50+ नागरिकांसाठी आरोग्य सहाय्य",
+        "select_language": "भाषा निवडा",
+        "choose_language": "पुढे जाण्यासाठी आपली भाषा निवडा",
+        "continue": "पुढे जा",
+        "upload_aadhaar": "आधार कार्ड अपलोड करा",
+        "upload_text": "वय पडताळणीसाठी कृपया आपले आधार कार्ड अपलोड करा",
+        "selected_file": "निवडलेली फाइल",
+        "verify_now": "आता पडताळणी करा",
+        "verification_result": "पडताळणी निकाल",
+        "autofilled_details": "ऑटोफिल तपशील",
+        "name": "नाव",
+        "age": "वय",
+        "location": "स्थान",
+        "verified": "पडताळले",
+        "eligible": "पात्र",
+        "invalid": "अवैध",
+        "invalid_age": "अवैध वय. फक्त 50+ वापरकर्ते पुढे जाऊ शकतात.",
+        "cannot_proceed": "पुढे जाता येणार नाही",
+        "valid_age": "वय यशस्वीरित्या पडताळले गेले. आपण पुढे जाऊ शकता.",
+        "proceed": "पुढे जा",
+        "ngo": "एनजीओ",
+        "reminder": "मेडिकल रिमाइंडर",
+        "sos": "एसओएस",
+        "appointment": "अपॉइंटमेंट",
+        "go_back": "मागे जा",
+        "dashboard_title": "मुख्य डॅशबोर्ड",
+        "dashboard_text": "पुढे जाण्यासाठी एक पर्याय निवडा.",
+        "welcome_user": "स्वागत",
+        "ngo_text": "एनजीओ मदतीसाठी विनंती करा आणि स्थिती पहा.",
+        "reminder_text": "औषध आणि टॅबलेट रिमाइंडर सेट करा.",
+        "sos_text": "आपत्कालीन परिस्थितीत एसओएस वापरा.",
+        "appointment_text": "मेडिकल अपॉइंटमेंट आणि हॉस्पिटल भेट बुक करा.",
+        "back_dashboard": "डॅशबोर्डवर परत जा",
+        "hospital_name": "हॉस्पिटलचे नाव",
+        "hospital_address": "हॉस्पिटलचा पत्ता",
+        "appointment_reason": "अपॉइंटमेंटचे कारण",
+        "appointment_date": "अपॉइंटमेंट तारीख",
+        "appointment_time": "अपॉइंटमेंट वेळ",
+        "submit_request": "विनंती सबमिट करा",
+        "ngo_status": "एनजीओ विनंती स्थिती",
+        "status": "स्थिती",
+        "pending": "प्रलंबित",
+        "approved": "मंजूर",
+        "rejected": "नाकारले",
+        "no_requests": "कोणतीही विनंती आढळली नाही.",
+        "view_status": "स्थिती पहा",
+        "reminder_form_title": "औषध रिमाइंडर सेट करा",
+        "medicine_name": "औषधाचे नाव",
+        "start_date": "सुरुवातीची तारीख",
+        "time": "वेळ",
+        "total_days": "एकूण दिवस",
+        "note": "पर्यायी नोट",
+        "save_reminder": "रिमाइंडर सेव्ह करा",
+        "my_reminders": "माझे रिमाइंडर",
+        "no_reminders": "कोणतेही रिमाइंडर आढळले नाहीत.",
+        "call_from": "आश्रय रिमाइंडर",
+        "incoming_call": "इनकमिंग रिमाइंडर कॉल",
+        "receive": "उचला",
+        "dismiss": "बंद करा",
+        "tablet_message": "गोळी घेण्याची वेळ झाली आहे.",
+        "days_left": "उरलेले दिवस",
+        "completed": "पूर्ण",
+        "active": "सक्रिय",
+        "doctor_type": "डॉक्टर प्रकार",
+        "choose_doctor_type": "डॉक्टर प्रकार निवडा",
+        "general_physician": "जनरल फिजिशियन",
+        "cardiology": "कार्डिओलॉजी",
+        "orthopedic": "ऑर्थोपेडिक",
+        "neurology": "न्युरॉलॉजी",
+        "eye_specialist": "डोळ्यांचे तज्ञ",
+        "ent": "ईएनटी",
+        "show_doctors": "डॉक्टर दाखवा",
+        "available_doctors": "उपलब्ध डॉक्टर",
+        "specialization": "विशेषज्ञता",
+        "experience": "अनुभव",
+        "fees": "कन्सल्टिंग फी",
+        "available_slot": "उपलब्ध स्लॉट",
+        "current_location": "सध्याचे स्थान",
+        "select_doctor": "डॉक्टर निवडा",
+        "my_appointments": "माझे अपॉइंटमेंट",
+        "doctor_name": "डॉक्टरचे नाव",
+        "selected_doctor_type": "निवडलेला डॉक्टर प्रकार",
+        "no_doctors_found": "या प्रकारासाठी डॉक्टर सापडला नाही.",
+        "permanent_disease": "कायमस्वरूपी आजार",
+        "no_previous_record": "मागील नोंद नाही",
+        "first_time_appointment": "पहिली अपॉइंटमेंट",
+        "repeat_appointment": "पुन्हा अपॉइंटमेंट",
+        "tell_permanent_disease": "तुमचा कायमस्वरूपी आजार सांगा",
+        "doctor_needed": "तुम्हाला कोणत्या प्रकारचा डॉक्टर हवा आहे?"
     }
 }
 
@@ -226,7 +413,10 @@ def init_db():
             reminder_time TEXT NOT NULL,
             total_days INTEGER NOT NULL,
             note TEXT,
-            last_alert_date TEXT
+            family_name TEXT,
+            family_phone TEXT,
+            last_alert_date TEXT,
+            family_last_alert_date TEXT
         )
     """)
 
@@ -252,6 +442,10 @@ def init_db():
     ensure_column(conn, "appointments", "previous_visit_date", "TEXT")
     ensure_column(conn, "appointments", "previous_visit_reason", "TEXT")
 
+    ensure_column(conn, "reminders", "family_name", "TEXT")
+    ensure_column(conn, "reminders", "family_phone", "TEXT")
+    ensure_column(conn, "reminders", "family_last_alert_date", "TEXT")
+
     conn.commit()
     conn.close()
 
@@ -264,7 +458,7 @@ def get_language():
 
 
 def get_language_data():
-    return translations["en"]
+    return translations.get(get_language(), translations["en"])
 
 
 def is_user_valid():
@@ -275,6 +469,10 @@ def is_user_valid():
 
 
 def get_alert_message(lang_code):
+    if lang_code == "hi":
+        return "दवा लेने का समय हो गया है।"
+    if lang_code == "mr":
+        return "गोळी घेण्याची वेळ झाली आहे."
     return "It is time to take your tablet."
 
 
@@ -471,7 +669,7 @@ def reminder_page():
             and current_time_only >= reminder_time_obj
             and last_alert_date != today_dt.strftime("%Y-%m-%d")
         ):
-            due_reminder = item
+            due_reminder = item_dict
 
     return render_template(
         "reminder.html",
@@ -491,8 +689,9 @@ def save_reminder():
     conn = get_db_connection()
     conn.execute("""
         INSERT INTO reminders (
-            user_name, medicine_name, start_date, reminder_time, total_days, note, last_alert_date
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            user_name, medicine_name, start_date, reminder_time, total_days,
+            note, family_name, family_phone, last_alert_date, family_last_alert_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         session["verification_data"]["name"],
         request.form.get("medicine_name", "").strip(),
@@ -500,6 +699,9 @@ def save_reminder():
         request.form.get("reminder_time", "").strip(),
         int(request.form.get("total_days", "1").strip()),
         request.form.get("note", "").strip(),
+        request.form.get("family_name", "").strip(),
+        request.form.get("family_phone", "").strip(),
+        None,
         None
     ))
     conn.commit()
@@ -516,9 +718,10 @@ def mark_reminder_alerted(reminder_id):
     conn = get_db_connection()
     conn.execute("""
         UPDATE reminders
-        SET last_alert_date = ?
+        SET last_alert_date = ?, family_last_alert_date = ?
         WHERE id = ? AND user_name = ?
     """, (
+        date.today().strftime("%Y-%m-%d"),
         date.today().strftime("%Y-%m-%d"),
         reminder_id,
         session["verification_data"]["name"]
@@ -562,7 +765,9 @@ def check_due_reminder():
                 "id": item["id"],
                 "medicine_name": item["medicine_name"],
                 "message": get_alert_message(get_language()),
-                "lang": get_language()
+                "lang": get_language(),
+                "family_name": item["family_name"] if item["family_name"] else "",
+                "family_phone": item["family_phone"] if item["family_phone"] else ""
             })
 
     return jsonify({"due": False})
