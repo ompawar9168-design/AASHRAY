@@ -1,122 +1,144 @@
-{% extends "base.html" %}
-
-{% block content %}
-<section class="single-screen-wrap">
-    <div class="main-card large-card">
-        <span class="tag">{{ t.reminder }}</span>
-        <h2>{{ t.reminder_form_title }}</h2>
-        <p class="card-text">{{ t.reminder_text }}</p>
-
-        <form action="{{ url_for('save_reminder') }}" method="POST" class="custom-form">
-            <div class="form-group">
-                <label>{{ t.medicine_name }}</label>
-                <input type="text" name="medicine_name" required>
-            </div>
-
-            <div class="form-group">
-                <label>{{ t.start_date }}</label>
-                <input type="date" name="start_date" required>
-            </div>
-
-            <div class="form-group">
-                <label>{{ t.time }}</label>
-                <input type="time" name="reminder_time" required>
-            </div>
-
-            <div class="form-group">
-                <label>{{ t.total_days }}</label>
-                <input type="number" name="total_days" min="1" max="365" required>
-            </div>
-
-            <div class="form-group">
-                <label>{{ t.note }}</label>
-                <textarea name="note" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Family Member Name</label>
-                <input type="text" name="family_name" placeholder="Enter family member name">
-            </div>
-
-            <div class="form-group">
-                <label>Family Member Phone</label>
-                <input type="text" name="family_phone" placeholder="Enter family member phone number">
-            </div>
-
-            <button type="submit" class="primary-btn full-btn">{{ t.save_reminder }}</button>
-        </form>
-
-        <div class="reminder-list-wrap">
-            <h3 class="sub-heading">{{ t.my_reminders }}</h3>
-
-            {% if reminders %}
-                <div class="status-list">
-                    {% for item in reminders %}
-                    <div class="status-card reminder-card">
-                        <div class="status-row"><strong>{{ t.medicine_name }}:</strong> {{ item["medicine_name"] }}</div>
-                        <div class="status-row"><strong>{{ t.start_date }}:</strong> {{ item["start_date"] }}</div>
-                        <div class="status-row"><strong>{{ t.time }}:</strong> {{ item["reminder_time"] }}</div>
-                        <div class="status-row"><strong>{{ t.total_days }}:</strong> {{ item["total_days"] }}</div>
-
-                        <div class="status-row">
-                            <strong>{{ t.status }}:</strong>
-                            {% if item["status_text"] == "completed" %}
-                                <span class="status-badge rejected-badge">{{ t.completed }}</span>
-                            {% else %}
-                                <span class="status-badge approved-badge">{{ t.active }}</span>
-                            {% endif %}
-                        </div>
-
-                        {% if item["status_text"] != "completed" %}
-                        <div class="status-row"><strong>{{ t.days_left }}:</strong> {{ item["days_left"] }}</div>
-                        {% endif %}
-
-                        {% if item["note"] %}
-                        <div class="status-row"><strong>{{ t.note }}:</strong> {{ item["note"] }}</div>
-                        {% endif %}
-
-                        <div class="status-row"><strong>Family Member:</strong> {{ item["family_name"] if item["family_name"] else "Not added" }}</div>
-                        <div class="status-row"><strong>Family Phone:</strong> {{ item["family_phone"] if item["family_phone"] else "Not added" }}</div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="result-message error-message">
-                    {{ t.no_reminders }}
-                </div>
-            {% endif %}
-        </div>
-
-        <a href="{{ url_for('dashboard') }}" class="secondary-btn full-btn-link top-btn-space">
-            {{ t.back_dashboard }}
-        </a>
-    </div>
-</section>
-
-<div id="callModal" class="call-modal-overlay hidden">
-    <div class="call-modal">
-        <div class="call-avatar">📞</div>
-        <p class="call-label">{{ t.incoming_call }}</p>
-        <h3>{{ t.call_from }}</h3>
-        <p id="callMedicineName" class="call-medicine"></p>
-
-        <div id="familyReminderBox" class="call-message-box hidden" style="margin-bottom:12px;">
-            <p><strong>Family Alert:</strong> <span id="familyAlertText"></span></p>
-        </div>
-
-        <div class="call-actions">
-            <button type="button" id="dismissCallBtn" class="call-btn dismiss-btn">{{ t.dismiss }}</button>
-            <button type="button" id="receiveCallBtn" class="call-btn receive-btn">{{ t.receive }}</button>
-        </div>
-
-        <div id="callMessageBox" class="call-message-box hidden">
-            <p id="spokenMessage"></p>
-        </div>
-    </div>
-</div>
-
 <script>
-    window.currentLang = {{ current_lang|tojson }};
+(function () {
+    const callModal = document.getElementById("callModal");
+    const receiveBtn = document.getElementById("receiveCallBtn");
+    const dismissBtn = document.getElementById("dismissCallBtn");
+    const msgBox = document.getElementById("callMessageBox");
+    const spokenMessage = document.getElementById("spokenMessage");
+    const callMedicineName = document.getElementById("callMedicineName");
+
+    let activeReminderId = null;
+    let modalOpen = false;
+    let ringtoneAudio = null;
+
+    function playRingtone() {
+        stopRingtone();
+        ringtoneAudio = new Audio("/static/audio/ringtone.mp3");
+        ringtoneAudio.loop = true;
+        ringtoneAudio.play().catch(err => {
+            console.log("Ringtone play blocked or failed:", err);
+        });
+    }
+
+    function stopRingtone() {
+        if (ringtoneAudio) {
+            ringtoneAudio.pause();
+            ringtoneAudio.currentTime = 0;
+            ringtoneAudio = null;
+        }
+    }
+
+    function showModal(medicineName, message) {
+        if (!callModal) return;
+
+        callMedicineName.textContent = medicineName || "";
+        spokenMessage.textContent = message || "It is time to take your tablet.";
+
+        if (msgBox) {
+            msgBox.classList.add("hidden");
+        }
+
+        callModal.classList.remove("hidden");
+        modalOpen = true;
+        playRingtone();
+
+        console.log("Reminder modal opened");
+    }
+
+    function hideModal() {
+        if (!callModal) return;
+        callModal.classList.add("hidden");
+        modalOpen = false;
+        activeReminderId = null;
+        stopRingtone();
+        window.speechSynthesis.cancel();
+    }
+
+    async function markReminderDone() {
+        if (!activeReminderId) return;
+        try {
+            await fetch("/mark-reminder-alerted/" + activeReminderId, {
+                method: "POST"
+            });
+            console.log("Reminder marked alerted:", activeReminderId);
+        } catch (e) {
+            console.log("mark reminder failed", e);
+        }
+    }
+
+    function speakText(text, langCode) {
+        if (!("speechSynthesis" in window)) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        if (langCode === "hi") {
+            utterance.lang = "hi-IN";
+        } else if (langCode === "mr") {
+            utterance.lang = "mr-IN";
+        } else {
+            utterance.lang = "en-US";
+        }
+
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        try {
+            window.speechSynthesis.speak(utterance);
+        } catch (e) {
+            console.log("speech failed", e);
+        }
+    }
+
+    async function checkDueReminder() {
+        if (modalOpen) return;
+
+        try {
+            const res = await fetch("/check-due-reminder?ts=" + Date.now(), {
+                cache: "no-store"
+            });
+
+            const data = await res.json();
+            console.log("Reminder API response:", data);
+
+            if (data.due) {
+                activeReminderId = data.id;
+                showModal(data.medicine_name, data.message);
+            }
+        } catch (e) {
+            console.log("check due reminder failed", e);
+        }
+    }
+
+    if (receiveBtn) {
+        receiveBtn.addEventListener("click", async function () {
+            stopRingtone();
+
+            if (msgBox) {
+                msgBox.classList.remove("hidden");
+            }
+
+            speakText(spokenMessage.textContent, "{{ current_lang }}");
+            await markReminderDone();
+
+            setTimeout(function () {
+                hideModal();
+                location.reload();
+            }, 2000);
+        });
+    }
+
+    if (dismissBtn) {
+        dismissBtn.addEventListener("click", async function () {
+            await markReminderDone();
+            hideModal();
+            location.reload();
+        });
+    }
+
+    setTimeout(checkDueReminder, 1000);
+    setInterval(checkDueReminder, 5000);
+})();
 </script>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-{% endblock %}
